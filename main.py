@@ -28,7 +28,7 @@ class BotProcess(threading.Thread):
             script_path = f'Bots/{self.bot_name}/main.py'
             while not self._stop_event.is_set():
                 try:
-                    print(subprocess.run(['python3', script_path], check=True))
+                    print(subprocess.run(['py', script_path], check=True))
                 except subprocess.CalledProcessError as e:
                     print(f'Error in {self.bot_name}: {e.stderr}')
                 time.sleep(1)
@@ -55,6 +55,7 @@ def serialize_bot_process(bot_process):
     return {
         'bot_name': bot_process.bot_name,
         'status': 'Running' if bot_process.is_alive() else 'Stopped',
+        'image_path': f'static/images/{bot_process.bot_name}_image.png',  # Assuming the images are in the 'static' folder
     }
 
 

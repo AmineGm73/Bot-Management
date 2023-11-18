@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Status</title>
+</head>
+<body>
+    <h1>Bot Status</h1>
+    <div>
+        {% for bot in bot_processes_list %}
+            <div style="border: 1px solid #ddd; padding: 10px; margin: 10px; display: inline-block;">
+                <h2>{{ bot.bot_name }}</h2>
+                <p>Status: {{ bot.status }}</p>
+                <img src="{{ bot.image_path }}" alt="{{ bot.bot_name }} Image" style="max-width: 200px;">
+                <br>
+                <a href="{{ url_for('start_bot', bot_name=bot.bot_name) }}">Start</a>
+                <a href="{{ url_for('stop_bot', bot_name=bot.bot_name) }}">Stop</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
