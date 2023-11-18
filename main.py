@@ -21,6 +21,7 @@ class BotProcess(threading.Thread):
         self.bot_name = bot_name
         self._stop_event = threading.Event()
         self._is_alive = True
+        self.image_path = f'images/{bot_name}_image.png'
 
     def run(self):
         print(f'Starting bot process for {self.bot_name}...')
@@ -50,11 +51,11 @@ class BotProcess(threading.Thread):
         self._is_alive = False
 
 
-def serialize_bot_process(bot_process):
+def serialize_bot_process(bot_process: BotProcess):
     return {
         'bot_name': bot_process.bot_name,
         'status': 'Running' if bot_process.is_alive() else 'Stopped',
-        'image_path': f'static/images/{bot_process.bot_name}_image.png',  # Assuming the images are in the 'static' folder
+        'image_path': bot_process.image_path  # Assuming the images are in the 'static' folder
     }
 
 
