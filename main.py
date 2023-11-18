@@ -31,7 +31,7 @@ class BotProcess(threading.Thread):
                     print(subprocess.run(['py', script_path], check=True))
                 except subprocess.CalledProcessError as e:
                     print(f'Error in {self.bot_name}: {e.stderr}')
-                time.sleep(1)
+                time.sleep(3600)
         except Exception as e:
             print(f'Error in {self.bot_name}: {str(e)}')
         finally:
@@ -46,7 +46,6 @@ class BotProcess(threading.Thread):
         return self._is_alive
 
     def stop(self):
-        print(f'Stopping bot process for {self.bot_name}...')
         self._stop_event.set()
         self._is_alive = False
 
@@ -127,7 +126,6 @@ if __name__ == '__main__':
         print("Interrupted. Stopping bots...")
         for process in bot_processes:
             process.stop()
-
-    print("All bot processes terminated.")
-
-    quit()
+        print("All bot processes terminated.")
+        flask_thread.join()
+        quit() 
