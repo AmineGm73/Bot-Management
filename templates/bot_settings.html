@@ -47,10 +47,10 @@
         <input type="text" maxlength="10" minlength="3" value="{{ bot.bot_name }}">
         {% if bot.is_alive() %}
             <p>Status: Running</p>
-            <a href="{{ url_for('stop_bot', bot_name=bot.bot_name, url='/') }}">Stop Bot</a>
+            <a href="{{ url_for('stop_bot', bot_name=bot.bot_name) }}">Stop Bot</a>
         {% else %}
             <p>Status: Stopped</p>
-            <a href="{{ url_for('start_bot', bot_name=bot.bot_name, url='/settings/'+bot.bot_name) }}">Start Bot</a>
+            <a href="{{ url_for('start_bot', bot_name=bot.bot_name) }}">Start Bot</a>
         {% endif %}
     </div>
 </body>

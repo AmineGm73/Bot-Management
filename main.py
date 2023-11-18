@@ -71,7 +71,7 @@ def index():
     return render_template('index.html', bot_processes_list=bot_processes)
 
 @app.route('/start_bot/<bot_name>')
-def start_bot(bot_name ,url):
+def start_bot(bot_name):
     global bot_processes
 
     # Check if the bot is not already running
@@ -86,13 +86,13 @@ def start_bot(bot_name ,url):
         bot_processes.append(new_process)
         new_process.start()
 
-        return redirect(url)
+        return redirect("/")
     else:
         return f'Invalid bot name: {bot_name} or missing token!'
 
 
 @app.route('/stop_bot/<bot_name>')
-def stop_bot(bot_name, url):
+def stop_bot(bot_name):
     global bot_processes
 
     # Find the bot process in the list
@@ -101,7 +101,7 @@ def stop_bot(bot_name, url):
     if process_to_stop is not None:
         try:
             process_to_stop.stop()
-            return redirect(url)
+            return redirect("/")
         except Exception as e:
             return f'Error stopping bot {bot_name}: {str(e)}'
     else:
