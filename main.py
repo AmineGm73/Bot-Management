@@ -22,6 +22,7 @@ class BotProcess(threading.Thread):
         self._stop_event = threading.Event()
         self._is_alive = True
         self.image_path = f'images/{bot_name}_image.png'
+        self.process = None
 
     def run(self):
         print(f'Starting bot process for {self.bot_name}...')
@@ -29,7 +30,8 @@ class BotProcess(threading.Thread):
             script_path = f'Bots/{self.bot_name}/main.py'
             while not self._stop_event.is_set():
                 try:
-                    subprocess.run(['py', script_path], check=True)
+                    self.process = subprocess.Popen(['py', script_path])
+                    self.process.wait()  # Wait for the process to complete
                 except subprocess.CalledProcessError as e:
                     print(f'Error in {self.bot_name}: {e.stderr}')
                 time.sleep(3600)
@@ -49,6 +51,10 @@ class BotProcess(threading.Thread):
     def stop(self):
         self._stop_event.set()
         self._is_alive = False
+        # Terminate the subprocess
+        if self.process:
+            self.process.terminate()
+            self.process.wait()
 
 
 def serialize_bot_process(bot_process: BotProcess):
