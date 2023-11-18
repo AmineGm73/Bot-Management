@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        body {
+            align-items: left;
+            justify-content: left;
+        }
+
+        .bot-container {
+            justify-content: left;
+            align-items: left;
+        }
+
+        .bot-card {
+            text-align: left;
+            margin-top: 0px;
+        }
+
+        .bot-card a {
+            background: #333;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #ddd;
+            padding: 2px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bot Settings</h1><a href="/">Back</a>
+
+    <div class="bot-card">
+        <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 200px;">
+        <input type="text" maxlength="10" minlength="3" value="{{ bot.bot_name }}">
+        {% if bot.is_alive() %}
+            <p>Status: Running</p>
+            <a href="{{ url_for('stop_bot', bot_name=bot.bot_name, url='/') }}">Stop Bot</a>
+        {% else %}
+            <p>Status: Stopped</p>
+            <a href="{{ url_for('start_bot', bot_name=bot.bot_name, url='/settings/'+bot.bot_name) }}">Start Bot</a>
+        {% endif %}
+    </div>
+</body>
+</html>

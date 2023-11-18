@@ -29,7 +29,7 @@ class BotProcess(threading.Thread):
             script_path = f'Bots/{self.bot_name}/main.py'
             while not self._stop_event.is_set():
                 try:
-                    print(subprocess.run(['py', script_path], check=True))
+                    subprocess.run(['py', script_path], check=True)
                 except subprocess.CalledProcessError as e:
                     print(f'Error in {self.bot_name}: {e.stderr}')
                 time.sleep(3600)
@@ -71,7 +71,7 @@ def index():
     return render_template('index.html', bot_processes_list=bot_processes)
 
 @app.route('/start_bot/<bot_name>')
-def start_bot(bot_name):
+def start_bot(bot_name ,url):
     global bot_processes
 
     # Check if the bot is not already running
@@ -86,13 +86,13 @@ def start_bot(bot_name):
         bot_processes.append(new_process)
         new_process.start()
 
-        return redirect("/")
+        return redirect(url)
     else:
         return f'Invalid bot name: {bot_name} or missing token!'
 
 
 @app.route('/stop_bot/<bot_name>')
-def stop_bot(bot_name):
+def stop_bot(bot_name, url):
     global bot_processes
 
     # Find the bot process in the list
@@ -101,11 +101,22 @@ def stop_bot(bot_name):
     if process_to_stop is not None:
         try:
             process_to_stop.stop()
-            return redirect("/")
+            return redirect(url)
         except Exception as e:
             return f'Error stopping bot {bot_name}: {str(e)}'
     else:
         return f'Bot {bot_name} not found or not running!'
+    
+@app.route('/settings_bot/<bot_name>')
+def bot_settings(bot_name):
+    global bot_processes
+
+    bot_process = [bot for bot in bot_processes if bot.bot_name == bot_name][0]
+
+    return render_template("bot_settings.html", bot=bot_process)
+
+
+
 
 
 if __name__ == '__main__':
