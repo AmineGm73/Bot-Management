@@ -37,10 +37,19 @@
             color: #ddd;
             padding: 2px;
         }
+
+        #back-a {
+            background: #333;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #ddd;
+            padding: 2px;
+            margin-bottom: 2px;
+        }
     </style>
 </head>
 <body>
-    <h1>Bot Settings</h1><a href="/">Back</a>
+    <h1>Bot Settings</h1><a href="/" id="back-a">Back</a>
 
     <div class="bot-card">
         <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 200px;">

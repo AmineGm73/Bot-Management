@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Bots Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,7 +34,17 @@
             border-radius: 3px;
             text-decoration: none;
             color: #ddd;
-            padding: 10px;
+            padding: 5px;
+            margin-left: 5px;
+        }
+
+        .bot-card.ri-settings-4-fill{
+            background: transparent;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #ddd;
+            padding: 5px;
+            margin-left: 5px;
         }
     </style>
 </head>
@@ -42,7 +53,7 @@
     <div>
         {% for bot in bot_processes_list %}
             <div class="bot-card" style="border: 1px solid #ddd; padding: 10px; margin: 10px; display: inline-block;">
-                <h2>{{ bot.bot_name }}</h2><a href="{{ url_for('stop_bot', bot_name=bot.bot_name) }}"></a>
+                <h2>{{ bot.bot_name }}<a href="{{ url_for('bot_settings', bot_name=bot.bot_name) }}"><i class="ri-settings-4-fill"></i></a></h2>
                 <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 100px;">
                 <p>Status: {{ bot.status }}</p>
                 <br>

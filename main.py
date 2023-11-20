@@ -145,5 +145,4 @@ if __name__ == '__main__':
         for process in bot_processes:
             process.stop()
         print("All bot processes terminated.")
-        flask_thread.join()
         quit() 
