@@ -55,7 +55,6 @@
             <div class="bot-card" style="border: 1px solid #ddd; padding: 10px; margin: 10px; display: inline-block;">
                 <h2>{{ bot.bot_name }}<a href="{{ url_for('bot_settings', bot_name=bot.bot_name) }}"><i class="ri-settings-4-fill"></i></a></h2>
                 <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 100px;">
-                <p>Status: {{ bot.status }}</p>
                 <br>
                 {% if bot.is_alive() %}
                     <p>Status: Running</p>

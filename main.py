@@ -2,15 +2,12 @@ from flask import Flask, render_template, request, redirect
 import threading
 import subprocess
 import time
+from json_m import*
 
 app = Flask(__name__)
 
 # Define your bot's token and prefix
-BOT_TOKENS = {
-    'DBolt': 'YOUR_BOT1_TOKEN',
-    'RACUBot': 'YOUR_BOT2_TOKEN'
-    # Add more bots as needed
-}
+BOTS = json_file("Bots\\bots.json", Operation.GET, "bots_name")
 
 # Define the bot processes
 
@@ -66,7 +63,7 @@ def serialize_bot_process(bot_process: BotProcess):
 
 
 def create_bot_processes():
-    return [BotProcess('DBolt'), BotProcess('RACUBot')]
+    return [BotProcess(bot_name) for bot_name in BOTS]
 
 
 bot_processes = create_bot_processes()
@@ -85,7 +82,7 @@ def start_bot(bot_name):
         return f'Bot {bot_name} is already running!'
     
     # Check if the bot_name is valid and has a corresponding token
-    if bot_name in BOT_TOKENS:
+    if bot_name in BOTS:
         old_process = [bot for bot in bot_processes if bot.bot_name == bot_name][0]
         bot_processes.remove(old_process)
         new_process = BotProcess(bot_name)
