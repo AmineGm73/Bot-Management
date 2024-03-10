@@ -5,62 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bot Settings</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        body {
-            align-items: left;
-            justify-content: left;
-        }
-
-        .bot-container {
-            justify-content: left;
-            align-items: left;
-        }
-
-        .bot-card {
-            text-align: left;
-            margin-top: 0px;
-        }
-
-        .bot-card a {
-            background: #333;
-            border-radius: 3px;
-            text-decoration: none;
-            color: #ddd;
-            padding: 2px;
-        }
-
-        #back-a {
-            background: #333;
-            border-radius: 3px;
-            text-decoration: none;
-            color: #ddd;
-            padding: 2px;
-            margin-bottom: 2px;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style/bot_settings_style.css') }}" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Bot Settings</h1><a href="/" id="back-a">Back</a>
-
+    <button class="save-btn btn-anim" style="position: fixed; bottom: 10px; right: 10px;">Save</button>
+    <a href="/" id="back-a">Back</a><h1><input type="text" name="name" id="bot_name" class="invisible-input" value="{{ bot.bot_name }}"> Settings :</h1>
+    <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 100px;">
     <div class="bot-card">
-        <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 200px;">
-        <input type="text" maxlength="10" minlength="3" value="{{ bot.bot_name }}">
+        
+        <ul id="props">
+        {% for prop_name, prop_value in props.items() %}
+            <li class="prop">{{ transform_snake_case_to_title(prop_name) }} : <input type="text" name="name" id="bot_name" class="invisible-input" value="{{ prop_value }}"></li>
+        {% endfor %}
+        </ul>
         {% if bot.is_alive() %}
-            <p>Status: Running</p>
-            <a href="{{ url_for('stop_bot', bot_name=bot.bot_name) }}">Stop Bot</a>
+            <div class="status" style="display: flex; max-height: 25px; position: fixed; bottom: 20px;">
+                <p style="color: #fff;">Status: Running</p>
+                <a href="{{ url_for('stop_bot', bot_name=bot.bot_name) }}" style="margin-top: 11px; margin-left: 5px; padding-bottom: 30px; font-size: 25px">
+                    <i class="ri-stop-circle-fill" style="color: red; height: 25px;"></i>
+                </a>
+            </div>
         {% else %}
-            <p>Status: Stopped</p>
-            <a href="{{ url_for('start_bot', bot_name=bot.bot_name) }}">Start Bot</a>
+            <div class="status" style="display: flex; max-height: 25px; position: fixed; bottom: 20px;">
+                <p style="color: #fff;">Status: Stopped</p>
+                <a href="{{ url_for('start_bot', bot_name=bot.bot_name) }}" style="margin-top: 11px; margin-left: 5px; padding-bottom: 30px; font-size: 25px">
+                    <i class="ri-play-circle-fill" style="color: greenyellow; height: 25px;"></i>
+                </a>
+            </div>
         {% endif %}
     </div>
+    <script src="{{ url_for('static', filename='js/bot_settings.js') }}"></script>
 </body>
 </html>

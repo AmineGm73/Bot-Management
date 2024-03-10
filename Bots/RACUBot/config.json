@@ -1,3 +1,8 @@
 {
-    
+    "name": "RACUBot",
+    "id": 0,
+    "props": {
+        "command_prefix": "?",
+        "bot_token": "nhgftdrtyiuojik"
+    }
 }

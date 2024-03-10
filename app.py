@@ -1,13 +1,36 @@
 from flask import Flask, render_template, request, redirect
+from flask_socketio import SocketIO
 import threading
 import subprocess
 import time
-from json_m import*
+from json_m.json_m import*
+import os
 
 app = Flask(__name__)
 
+socketio = SocketIO(app)
+
+def transform_snake_case_to_title(string):
+    words = string.split('_')
+    title_case_words = [word.capitalize() for word in words]
+    return ' '.join(title_case_words)
+
+app.jinja_env.globals.update(transform_snake_case_to_title=transform_snake_case_to_title)
+
+def update_bots_json():
+    # Get the list of items in the directory
+    directory_contents = os.listdir("Bots")
+
+    # Filter out only the directories
+    folder_names = [item for item in directory_contents if os.path.isdir(os.path.join("Bots", item))]
+    print(folder_names)
+    return folder_names
+
+
+
 # Define your bot's token and prefix
-BOTS = json_file("Bots\\bots.json", Operation.GET, "bots_name")
+
+BOTS = json_file("Bots\\bots.json", Operation.CHANGE, "bots_name", update_bots_json())["bots_name"]
 
 # Define the bot processes
 
@@ -113,18 +136,26 @@ def stop_bot(bot_name):
 @app.route('/settings_bot/<bot_name>')
 def bot_settings(bot_name):
     global bot_processes
-
+    socketio.emit("connect")
     bot_process = [bot for bot in bot_processes if bot.bot_name == bot_name][0]
+    props = json_file(f"Bots/{bot_name}/config.json", Operation.GET, "props")
+    return render_template("bot_settings.html", bot=bot_process, props=props)
 
-    return render_template("bot_settings.html", bot=bot_process)
 
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected to SocketIO')
 
-
+@socketio.on('message_from_client')
+def handle_message_from_client(data):
+    print('Received message from client:', data)
+    # You can emit a response back to the client if needed
+    socketio.emit('message_from_server', {'response': 'Message received on the server!'})
 
 
 if __name__ == '__main__':
     # Start the Flask app in a separate thread
-    flask_thread = threading.Thread(target=app.run, kwargs={'host': "0.0.0.0", 'debug': True, 'use_reloader': False})
+    flask_thread = threading.Thread(target=socketio.run, kwargs={'app':app,'host': "0.0.0.0", 'debug': True, 'use_reloader': False})
     flask_thread.start()
 
     # Start the bot processes
@@ -137,6 +168,7 @@ if __name__ == '__main__':
             for process in bot_processes:
                 if process.is_alive():
                     process.join(1)
+        flask_thread.join(1)
     except KeyboardInterrupt:
         print("Interrupted. Stopping bots...")
         for process in bot_processes:

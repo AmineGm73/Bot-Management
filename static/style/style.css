@@ -1,0 +1,96 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #222;
+}
+
+h1 {
+    color: #333;
+}
+
+.bot-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.bot-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 15px;
+    width: 200px;
+    text-align: center;
+}
+
+.bot-card.ri-settings-4-fill{
+    background: transparent;
+    border-radius: 3px;
+    text-decoration: none;
+    color: #ddd;
+    padding: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-left: 5px;
+}
+
+.anim_btn {
+    position: relative;
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    font-size: 16px;
+    background-color: inherit;
+    border-radius: 100px;
+    font-weight: 600;
+    color: #ffffff40;
+    box-shadow: 0 0 0 2px #ffffff20;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+    text-decoration: none;
+}
+
+.anim_btn span:last-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: #2196F3;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.anim_btn span:first-child {
+    position: relative;
+    z-index: 1;
+}
+
+.anim_btn:hover {
+    box-shadow: 0 0 0 5px #2195f360;
+    color: #ffffff;
+}
+
+.anim_btn:active {
+    scale: 0.95;
+}
+
+.anim_btn:hover span:last-child {
+    width: 150px;
+    height: 150px;
+    opacity: 1;
+}
+
+
+.setting-btn {
+    background: #333;
+    color: #ddd;
+    border-radius: 3px;
+    font-size: large;
+    padding: 7px 7px;
+    border: 2px #2c2c2c solid;
+    text-decoration: none;
+    margin-left: 15px;
+}

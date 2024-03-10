@@ -5,63 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Bots Management</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        .bot-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .bot-card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin: 10px;
-            padding: 15px;
-            width: 200px;
-            text-align: center;
-        }
-
-        .bot-card a {
-            background: #333;
-            border-radius: 3px;
-            text-decoration: none;
-            color: #ddd;
-            padding: 5px;
-            margin-left: 5px;
-        }
-
-        .bot-card.ri-settings-4-fill{
-            background: transparent;
-            border-radius: 3px;
-            text-decoration: none;
-            color: #ddd;
-            padding: 5px;
-            margin-left: 5px;
-        }
-    </style>
+    <link href="{{ url_for('static', filename='style/style.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h1>Bot Status</h1>
+    <h1 style="color: #fff;">Bots Status</h1>
     <div>
         {% for bot in bot_processes_list %}
-            <div class="bot-card" style="border: 1px solid #ddd; padding: 10px; margin: 10px; display: inline-block;">
-                <h2>{{ bot.bot_name }}<a href="{{ url_for('bot_settings', bot_name=bot.bot_name) }}"><i class="ri-settings-4-fill"></i></a></h2>
+            <div class="bot-card" style="border: 1px solid #333; padding: 10px; margin: 10px; display: inline-block;">
+                <h2 style="color: #fff;">{{ bot.bot_name }}<a href="{{ url_for('bot_settings', bot_name=bot.bot_name) }}" class="setting-btn"><i class="ri-settings-4-fill"></i></a></h2>
                 <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 100px;">
                 <br>
                 {% if bot.is_alive() %}
-                    <p>Status: Running</p>
-                    <a href="{{ url_for('stop_bot', bot_name=bot.bot_name) }}">Stop Bot</a>
+                    <p style="color: #fff;">Status: Running</p>
+                    <a href="{{ url_for('stop_bot', bot_name=bot.bot_name) }}" class="anim_btn"><span>Stop Bot</span><span></span></a>
                 {% else %}
-                    <p>Status: Stopped</p>
-                    <a href="{{ url_for('start_bot', bot_name=bot.bot_name) }}">Start Bot</a>
+                    <p style="color: #fff;">Status: Stopped</p>
+                    <button href="{{ url_for('start_bot', bot_name=bot.bot_name) }}" class="anim_btn"><span>Start Bot</span><span></span></a>
                 {% endif %}
             </div>
         {% endfor %}

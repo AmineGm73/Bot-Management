@@ -1,7 +1,8 @@
 {
-    "name": "",
+    "name": "DBolt",
     "id": 0,
     "props": {
-
+        "command_prefix": "?",
+        "bot_token": "uhygtfrdessdfghj"
     }
 }
