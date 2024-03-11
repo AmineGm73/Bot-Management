@@ -1,21 +1,26 @@
-from flask import Flask, render_template, request, redirect
-from flask_socketio import SocketIO
 import threading
 import subprocess
 import time
-from json_m.json_m import*
 import os
+import logging
+from flask import Flask, render_template, request, redirect
+from json_m.json_m import*
+from extensions.socketio import Socket
+from datetime import datetime, timedelta
+from extensions.utilities import *
+from math import *
 
 app = Flask(__name__)
 
-socketio = SocketIO(app)
+socketio = Socket(app=app)
 
-def transform_snake_case_to_title(string):
-    words = string.split('_')
-    title_case_words = [word.capitalize() for word in words]
-    return ' '.join(title_case_words)
-
+def run():
+    # Start the Flask app in a separate thread
+    flask_thread = threading.Thread(target=socketio.start, kwargs={'host': "0.0.0.0", 'debug': True, 'use_reloader': False})
+    flask_thread.start()
+    
 app.jinja_env.globals.update(transform_snake_case_to_title=transform_snake_case_to_title)
+
 
 def update_bots_json():
     # Get the list of items in the directory
@@ -24,13 +29,13 @@ def update_bots_json():
     # Filter out only the directories
     folder_names = [item for item in directory_contents if os.path.isdir(os.path.join("Bots", item))]
     print(folder_names)
-    return folder_names
+    return json_file("Bots\\bots.json", Operation.CHANGE, "bots_names", folder_names)["bots_names"]
 
 
 
 # Define your bot's token and prefix
 
-BOTS = json_file("Bots\\bots.json", Operation.CHANGE, "bots_name", update_bots_json())["bots_name"]
+BOTS = update_bots_json()
 
 # Define the bot processes
 
@@ -40,17 +45,38 @@ class BotProcess(threading.Thread):
         super().__init__()
         self.bot_name = bot_name
         self._stop_event = threading.Event()
-        self._is_alive = True
+        self._is_alive = False
         self.image_path = f'images/{bot_name}_image.png'
         self.process = None
+        self.first_run_time = None
+        self.stop_run_time = None
+        self.runtime = json_file("Bots\\bots.json", Operation.GET, "bots_runtimes")[self.bot_name]
+        # Create a logger
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+        # Create a file handler and set its level to DEBUG
+        file_handler = logging.FileHandler(f'Bots/{self.bot_name}/data/bot.log')
+        file_handler.setLevel(logging.DEBUG)
+        # Create a console handler and set its level to INFO
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.INFO)
+        # Create a formatter and add it to the handlers
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
+        # Add the handlers to the logger
+        self.logger.addHandler(file_handler)
+        self.logger.addHandler(console_handler)
 
     def run(self):
         print(f'Starting bot process for {self.bot_name}...')
+        self.first_run_time = datetime.now()
         try:
             script_path = f'Bots/{self.bot_name}/main.py'
             while not self._stop_event.is_set():
                 try:
                     self.process = subprocess.Popen(['py', script_path])
+                    self._is_alive = True
                     self.process.wait()  # Wait for the process to complete
                 except subprocess.CalledProcessError as e:
                     print(f'Error in {self.bot_name}: {e.stderr}')
@@ -64,6 +90,7 @@ class BotProcess(threading.Thread):
         self._stop_event = threading.Event()
         self._is_alive = True
         super().start()
+        self.log("Bot started successfuly.")
 
     def is_alive(self):
         return self._is_alive
@@ -75,21 +102,26 @@ class BotProcess(threading.Thread):
         if self.process:
             self.process.terminate()
             self.process.wait()
+            self.stop_run_time = datetime.now()
+            print(f"{self.bot_name} Process terminated, which was running before {format_seconds_into_time(self.runtime)}")
+            self.log(f"Bot Process stopped, which was running before {format_seconds_into_time(self.runtime)}")
+            
+            
+    def save_runtime(self):
+        bots_runtimes = json_file("Bots\\bots.json", Operation.GET, "bots_runtimes")
+        if self.stop_run_time is None:
+            bots_runtimes[self.bot_name] = floor((datetime.now() - self.first_run_time).total_seconds())
+            self.runtime = bots_runtimes[self.bot_name]
+            json_file("Bots\\bots.json", Operation.CHANGE, "bots_runtimes", bots_runtimes)
+            
+    def log(self, message):
+        # Perform some action
+        self.logger.info(message)
 
-
-def serialize_bot_process(bot_process: BotProcess):
-    return {
-        'bot_name': bot_process.bot_name,
-        'status': 'Running' if bot_process.is_alive() else 'Stopped',
-        'image_path': bot_process.image_path  # Assuming the images are in the 'static' folder
-    }
 
 
 def create_bot_processes():
     return [BotProcess(bot_name) for bot_name in BOTS]
-
-
-bot_processes = create_bot_processes()
 
 @app.route('/')
 def index():
@@ -136,42 +168,61 @@ def stop_bot(bot_name):
 @app.route('/settings_bot/<bot_name>')
 def bot_settings(bot_name):
     global bot_processes
-    socketio.emit("connect")
     bot_process = [bot for bot in bot_processes if bot.bot_name == bot_name][0]
     props = json_file(f"Bots/{bot_name}/config.json", Operation.GET, "props")
     return render_template("bot_settings.html", bot=bot_process, props=props)
 
+@app.route('/bot_logs/<bot_name>')
+def bot_logs(bot_name):
+    global bot_processes
+    bot_process = [bot for bot in bot_processes if bot.bot_name == bot_name][0]
+    return render_template("bot_log.html", bot=bot_process)
 
-@socketio.on('connect')
-def handle_connect():
-    print('Client connected to SocketIO')
-
-@socketio.on('message_from_client')
+@socketio.socketio.on('saveData')
 def handle_message_from_client(data):
-    print('Received message from client:', data)
-    # You can emit a response back to the client if needed
-    socketio.emit('message_from_server', {'response': 'Message received on the server!'})
+    update_bot_data(data)
 
+def update(**kwargs):
+    global socketio
+    while True:
+        bot_processes:BotProcess = kwargs.get("bot_processes")
+        runtime_data = {}
+        log_data = {}
+        for process in bot_processes:
+            process.save_runtime()
+            runtime_data[process.bot_name] = process.runtime
+            with open(f"Bots/{process.bot_name}/data/bot.log", "r") as log_file:
+                log_data[process.bot_name] = log_file.read()
+        socketio.socketio.emit('runtime_update', runtime_data)
+        
+        socketio.socketio.emit("log_update", log_data)
+        
+        time.sleep(1)
 
 if __name__ == '__main__':
-    # Start the Flask app in a separate thread
-    flask_thread = threading.Thread(target=socketio.run, kwargs={'app':app,'host': "0.0.0.0", 'debug': True, 'use_reloader': False})
-    flask_thread.start()
+    run()
 
     # Start the bot processes
     bot_processes = create_bot_processes()
     for process in bot_processes:
-        process.start()
+        run_on_start = json_file(f"Bots/{process.bot_name}/config.json", Operation.GET, "on_start_run")
+        if not run_on_start:
+            pass
+        else:
+            process.start()
 
     try:
+        f_update = threading.Thread(target=update, kwargs={"bot_processes": bot_processes})
+        f_update.start()
         while any(process.is_alive() for process in bot_processes):
             for process in bot_processes:
                 if process.is_alive():
                     process.join(1)
-        flask_thread.join(1)
     except KeyboardInterrupt:
         print("Interrupted. Stopping bots...")
         for process in bot_processes:
             process.stop()
         print("All bot processes terminated.")
+        f_update.join()
         quit() 
+

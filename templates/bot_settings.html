@@ -10,14 +10,15 @@
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
 </head>
 <body>
-    <button class="save-btn btn-anim" style="position: fixed; bottom: 10px; right: 10px;">Save</button>
+    <button class="save-btn btn-anim" style="position: fixed; bottom: 10px; right: 10px;" onclick="sendData()">Save</button>
+    <h4 class="runtime-txt">Running for : Nah</h4>
     <a href="/" id="back-a">Back</a><h1><input type="text" name="name" id="bot_name" class="invisible-input" value="{{ bot.bot_name }}"> Settings :</h1>
     <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 100px;">
     <div class="bot-card">
         
         <ul id="props">
         {% for prop_name, prop_value in props.items() %}
-            <li class="prop">{{ transform_snake_case_to_title(prop_name) }} : <input type="text" name="name" id="bot_name" class="invisible-input" value="{{ prop_value }}"></li>
+            <li class="prop" id="{{ prop_name }}">{{ transform_snake_case_to_title(prop_name) }} : <input type="text" name="name" id="bot_name" class="invisible-input" value="{{ prop_value }}"></li>
         {% endfor %}
         </ul>
         {% if bot.is_alive() %}

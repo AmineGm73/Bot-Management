@@ -20,7 +20,7 @@
                     <a href="{{ url_for('stop_bot', bot_name=bot.bot_name) }}" class="anim_btn"><span>Stop Bot</span><span></span></a>
                 {% else %}
                     <p style="color: #fff;">Status: Stopped</p>
-                    <button href="{{ url_for('start_bot', bot_name=bot.bot_name) }}" class="anim_btn"><span>Start Bot</span><span></span></a>
+                    <a href="{{ url_for('start_bot', bot_name=bot.bot_name) }}" class="anim_btn"><span>Start Bot</span><span></span></a>
                 {% endif %}
             </div>
         {% endfor %}

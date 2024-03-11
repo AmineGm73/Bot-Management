@@ -1,6 +1,10 @@
 {
-    "bots_name": [
+    "bots_names": [
         "DBolt",
         "RACUBot"
-    ]
+    ],
+    "bots_runtimes": {
+        "RACUBot": 2040,
+        "DBolt": 2040
+    }
 }

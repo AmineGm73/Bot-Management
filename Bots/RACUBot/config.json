@@ -1,6 +1,7 @@
 {
     "name": "RACUBot",
     "id": 0,
+    "on_start_run": true,
     "props": {
         "command_prefix": "?",
         "bot_token": "nhgftdrtyiuojik"

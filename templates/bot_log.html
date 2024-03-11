@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logs of {{ bot.bot_name }}</title>
+    <style>
+        body {
+            background-color: #333333;
+        }
+
+        .s1 {
+            color: green;
+        }
+        .s2 {
+            color: rgb(88, 230, 255);
+        }
+        .s3 {
+            color: rgb(172, 255, 172);
+        }
+        .s4 {
+            color: rgb(88, 230, 255);
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/prism.css') }}">
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+</head>
+<body>
+    <pre><code class="language-log"  data-prismjs-copy="Copy" data-prismjs-copy-error="Try Selecting and Pressing Ctrl+C, or try again later." data-prismjs-copy-success="Copied successfuly!">2024-03-11 16:03:53,306 - __main__ - INFO - Bot Process stopped, which was running before 24s</code></pre>
+    <script src="{{ url_for('static', filename='js/prism.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bot_log.js') }}"></script>
+</body>
+</html>

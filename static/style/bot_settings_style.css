@@ -139,7 +139,12 @@ img {
     transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
 
-
+.runtime-txt {
+    color: #fff;
+    right: 135px;
+    position: absolute;
+    bottom: -7px;
+}
 
 
 #back-a {
