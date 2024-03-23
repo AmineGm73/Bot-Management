@@ -44,7 +44,6 @@ window.onload = () => {
 
 socket.on('runtime_update', function(data) {
     // Get the runtime value from the data
-    console.log(data)
     let botName = window.location.href.split('/').pop();
     var runtime = data[botName];
     
