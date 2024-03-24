@@ -3,12 +3,14 @@ import subprocess
 import time
 import os
 import logging
+import shutil
 from flask import Flask, render_template, request, redirect
 from json_m.json_m import*
 from extensions.socketio import Socket
 from datetime import datetime, timedelta
 from extensions.utilities import *
 from math import *
+
 
 app = Flask(__name__)
 
@@ -18,6 +20,7 @@ def run():
     # Start the Flask app in a separate thread
     flask_thread = threading.Thread(target=socketio.start, kwargs={'host': "0.0.0.0", 'debug': True, 'use_reloader': False})
     flask_thread.start()
+    flask_thread.join(1)
     
 app.jinja_env.globals.update(transform_snake_case_to_title=transform_snake_case_to_title)
 
@@ -28,17 +31,17 @@ def update_bots_json():
 
     # Filter out only the directories
     folder_names = [item for item in directory_contents if os.path.isdir(os.path.join("Bots", item))]
-    print(folder_names)
-    return json_file("Bots\\bots.json", Operation.CHANGE, "bots_names", folder_names)["bots_names"]
+    json_file("Bots/bots.json", Operation.CHANGE, "bots_names", folder_names)
+    return folder_names
 
 
 
-# Define your bot's token and prefix
+# Bots Names
 
 BOTS = update_bots_json()
+print(BOTS)
 
-# Define the bot processes
-
+# Bot Process Class
 
 class BotProcess(threading.Thread):
     def __init__(self, bot_name):
@@ -50,7 +53,7 @@ class BotProcess(threading.Thread):
         self.process = None
         self.first_run_time = None
         self.stop_run_time = None
-        self.runtime = json_file("Bots\\bots.json", Operation.GET, "bots_runtimes")[self.bot_name]
+        self.runtime = json_file("Bots/bots.json", Operation.GET, "bots_runtimes")[self.bot_name]
         # Create a logger
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
@@ -75,7 +78,7 @@ class BotProcess(threading.Thread):
             script_path = f'Bots/{self.bot_name}/main.py'
             while not self._stop_event.is_set():
                 try:
-                    self.process = subprocess.Popen(['py', script_path])
+                    self.process = subprocess.Popen([str(shutil.which("python")), script_path])
                     self._is_alive = True
                     self.process.wait()  # Wait for the process to complete
                 except subprocess.CalledProcessError as e:
@@ -83,8 +86,10 @@ class BotProcess(threading.Thread):
                 time.sleep(3600)
         except Exception as e:
             print(f'Error in {self.bot_name}: {str(e)}')
+            self.log(f'Error in {self.bot_name}: {str(e)}')
         finally:
             print(f'Bot process for {self.bot_name} terminated.')
+            self.log(f"Bot Process stopped, which was running before {format_seconds_into_time(self.runtime)}")
 
     def start(self):
         self._stop_event = threading.Event()
@@ -103,16 +108,15 @@ class BotProcess(threading.Thread):
             self.process.terminate()
             self.process.wait()
             self.stop_run_time = datetime.now()
-            print(f"{self.bot_name} Process terminated, which was running before {format_seconds_into_time(self.runtime)}")
-            self.log(f"Bot Process stopped, which was running before {format_seconds_into_time(self.runtime)}")
+            
             
             
     def save_runtime(self):
-        bots_runtimes = json_file("Bots\\bots.json", Operation.GET, "bots_runtimes")
+        bots_runtimes = json_file("Bots/bots.json", Operation.GET, "bots_runtimes")
         if self.stop_run_time is None:
             bots_runtimes[self.bot_name] = floor((datetime.now() - self.first_run_time).total_seconds())
             self.runtime = bots_runtimes[self.bot_name]
-            json_file("Bots\\bots.json", Operation.CHANGE, "bots_runtimes", bots_runtimes)
+            json_file("Bots/bots.json", Operation.CHANGE, "bots_runtimes", bots_runtimes)
             
     def log(self, message):
         # Perform some action
