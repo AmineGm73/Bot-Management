@@ -44,3 +44,9 @@ json_m/
         }
     }
     ```
+    
+    * **data/bot.log**
+    ```log
+    2024-03-24 10:51:36,480 - __main__ - INFO - Bot started successfuly.
+    2024-03-24 10:51:36,480 - __main__ - INFO - Bot started successfuly.
+    ```
