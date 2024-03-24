@@ -2,8 +2,8 @@
 This is a Bot Management where you can stop or run codes and manage them as you need
 
 ## Requirements
-- Install the requirements by the following command ```pip install -r requirements.txt```
-- You also need a module that I made [Json Module](https://github.com/AmineGm73/Json-Module). Download the zip and extract it into the Lib folder of your Virtual Environemment or the directory where is python situated (On Windows), the strcture of the folder must be :
+- Install the requirements by running: `pip install -r requirements.txt`.
+- You need a module called [Json Module](https://github.com/AmineGm73/Json-Module). After downloading the zip, extract it into the `Lib` folder of your Virtual Environment or the directory where Python is located (on Windows). The structure of the folder must be:
 ```
 json_m/
     __init__.py
