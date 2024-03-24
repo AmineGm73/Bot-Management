@@ -78,3 +78,6 @@ This project is licensed under the terms of the MIT license. See [LICENSE](https
 That's it! You're now ready to manage your bots efficiently using the Bot Management system.
 
 Feel free to adjust the instructions as needed to fit your specific application and audience.
+
+
+Copyright - 2024 shah1345 (Shah Newaz) From [UiVerse](https://uiverse.io/)
