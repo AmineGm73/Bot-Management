@@ -50,3 +50,28 @@ json_m/
     2024-03-24 10:51:36,480 - __main__ - INFO - Bot started successfuly.
     2024-03-24 10:51:36,480 - __main__ - INFO - Bot started successfuly.
     ```
+
+## Get Started
+To get started with Bot Management, follow these steps:
+
+1. **Run Flask App**: Navigate to the root directory of your project where `app.py` is located. Run the Flask app by executing the command:
+   ```bash
+   python app.py
+   ```
+   This will start the Flask app and make it accessible locally.
+
+2. **Access the App**: Once the Flask app is running, you can access it by opening a web browser and navigating to:
+    - `http://localhost:2010`
+    - `http://YOUR_LOCAL_WIFI_IP:2010`
+
+3. **Manage Bots**: Upon accessing the app, you'll see a grid displaying the bots from the Bots folder. You can stop or run each bot by clicking the corresponding buttons in the grid.
+
+4. **Configure Bot Settings**:
+    - **Settings Icon**: Click the settings icon next to each bot entry to access its settings.
+    - **Modify Bot Props**: On the settings page, you can modify the properties of the bot, such as name, command prefix, and bot token.
+    - **Save Changes**: After making modifications, click the "Save" button to save the changes to the JSON file corresponding to that bot.
+
+## **License**:
+
+
+That's it! You're now ready to manage your bots efficiently using the Bot Management system.
