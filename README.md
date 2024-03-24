@@ -20,27 +20,27 @@ json_m/
 
 - Here's an example of the structure and content of `main.py`, `config.json`, and the `data/bot.log` file:
 
-* **main.py:**
-```python
-from json_m.json_m import json_file, Operation
+    * **main.py:**
+    ```python
+    from json_m.json_m import json_file, Operation
 
-config_props = json_file("config.json", Operation.GET, "props")
+    config_props = json_file("config.json", Operation.GET, "props")
 
-# Main Code Start
-while True:
-    pass
-```
+    # Main Code Start
+    while True:
+        pass
+    ```
 
 
-* **config.json**
-```json
-{
-    "name": "DBolt",
-    "id": 0,
-    "on_start_run": true,
-    "props": {
-        "command_prefix": "?",
-        "bot_token": "uhygtfrdessdf"
+    * **config.json**
+    ```json
+    {
+        "name": "DBolt",
+        "id": 0,
+        "on_start_run": true,
+        "props": {
+            "command_prefix": "?",
+            "bot_token": "uhygtfrdessdf"
+        }
     }
-}
-```
+    ```
