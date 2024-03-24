@@ -6,29 +6,101 @@
     <title>Logs of {{ bot.bot_name }}</title>
     <style>
         body {
-            background-color: #333333;
+            background-color: #222;
+            overflow: hidden; /* Hide scrollbar */
+        }
+        .container {
+            height: 90vh; /* Ensure container takes full height of viewport */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        #back-a {
+            background: #333;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #ddd;
+            padding: 5px;
+            margin-bottom: 2px;
+            font-family: Arial, sans-serif;
         }
 
-        .s1 {
-            color: green;
+        #back-a {
+            display: inline-block;
+            transition: all 0.2s ease-in;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            color: #fff;
+            padding: 0.6em 1.5em;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 0.5em;
+            background: #333;
+            border: 1px solid #3b3b3b;
+            box-shadow: 6px 6px 12px #474747, -6px -6px 12px #000000;
         }
-        .s2 {
-            color: rgb(88, 230, 255);
+        
+        #back-a:active {
+            color: #666;
+            box-shadow: inset 4px 4px 12px #414141, inset -4px -4px 12px #ffffff;
         }
-        .s3 {
-            color: rgb(172, 255, 172);
+        
+        #back-a:before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) scaleY(1) scaleX(1.25);
+            top: 100%;
+            width: 140%;
+            height: 180%;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            display: block;
+            transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+            z-index: -1;
         }
-        .s4 {
-            color: rgb(88, 230, 255);
+        
+        #back-a:after {
+            content: "";
+            position: absolute;
+            left: 55%;
+            transform: translateX(-50%) scaleY(1) scaleX(1.45);
+            top: 180%;
+            width: 160%;
+            height: 190%;
+            background-color: #000;
+            border-radius: 50%;
+            display: block;
+            transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+            z-index: -1;
+        }
+        
+        #back-a:hover {
+            color: #ffffff;
+            border: 1px solid #ff6b6b;
+        }
+        
+        #back-a:hover:before {
+            top: -35%;
+            background-color: #ff6b6b;
+            transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+        }
+        
+        #back-a:hover:after {
+            top: -45%;
+            background-color: rgb(128, 0, 0);
+            transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
         }
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='style/prism.css') }}">
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
 </head>
 <body>
-    
-    <pre><code class="language-log"  data-prismjs-copy="Copy" data-prismjs-copy-error="Try Selecting and Pressing Ctrl+C, or try again later." data-prismjs-copy-success="Copied successfuly!">2024-03-11 16:03:53,306 - __main__ - INFO - Bot Process stopped, which was running before 24s</code></pre>
+    <a href="/" id="back-a">Back</a>
+    <div class="container">
+        <pre><code class="language-log"  id="logs" data-prismjs-copy="Copy" data-prismjs-copy-error="Try Selecting and Pressing Ctrl+C, or try again later." data-prismjs-copy-success="Copied successfuly!"></code></pre>
+    </div>
     <script src="{{ url_for('static', filename='js/prism.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bot_log.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </body>
 </html>

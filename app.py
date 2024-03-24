@@ -18,7 +18,7 @@ socketio = Socket(app=app)
 
 def run():
     # Start the Flask app in a separate thread
-    flask_thread = threading.Thread(target=socketio.start, kwargs={'host': "0.0.0.0", 'debug': True, 'use_reloader': False})
+    flask_thread = threading.Thread(target=socketio.start, kwargs={'host': "0.0.0.0", 'debug': True, 'use_reloader': False, 'port': 2010})
     flask_thread.start()
     flask_thread.join(1)
     

@@ -12,7 +12,9 @@
 <body>
     <button class="save-btn btn-anim" style="position: fixed; bottom: 10px; right: 10px;" onclick="sendData()">Save</button>
     <h4 class="runtime-txt">Running for : Nah</h4>
-    <a href="/" id="back-a">Back</a><h1><input type="text" name="name" id="bot_name" class="invisible-input" value="{{ bot.bot_name }}"> Settings :</h1>
+    <a href="/" id="back-a">Back</a>
+    <a href="/bot_logs/{{ bot.bot_name }}" class="btn-anim" style="left: 150px; text-decoration: none;">Logs<i class="ri-file-text-line"></i></a>
+    <h1><input type="text" name="name" id="bot_name" class="invisible-input" value="{{ bot.bot_name }}"> Settings :</h1>
     <img src="{{ url_for('static', filename=bot.image_path) }}" alt="{{ bot.bot_name }} Image" style="max-width: 100px;">
     <div class="bot-card">
         

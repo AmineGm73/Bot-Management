@@ -18,4 +18,4 @@ def format_seconds_into_time(seconds):
 def update_bot_data(newdata):
     bot_name = newdata["bot_name"]
     del newdata["bot_name"]
-    print(json_file(f"../Bots/{bot_name}/config.json", Operation.CHANGE, "props", newdata))
+    return json_file(f"../Bots/{bot_name}/config.json", Operation.CHANGE, "props", newdata)
