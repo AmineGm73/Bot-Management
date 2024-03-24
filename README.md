@@ -72,7 +72,7 @@ To get started with Bot Management, follow these steps:
     - **Save Changes**: After making modifications, click the "Save" button to save the changes to the JSON file corresponding to that bot.
 
 ## **License**:
-This project is licensed under the terms of the MIT license. See [LICENSE](https://github.com/AmineGm73/Bot-Management?tab=MIT-1-ov-file) for more information.
+This project is licensed under the terms of the MIT license. See [LICENSE](https://github.com/AmineGm73/Bot-Management?tab=MIT-1-ov-file#mit-license) for more information.
 ---
 
 That's it! You're now ready to manage your bots efficiently using the Bot Management system.
