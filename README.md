@@ -68,10 +68,13 @@ To get started with Bot Management, follow these steps:
 
 4. **Configure Bot Settings**:
     - **Settings Icon**: Click the settings icon next to each bot entry to access its settings.
-    - **Modify Bot Props**: On the settings page, you can modify the properties of the bot, such as name, command prefix, and bot token.
+    - **Modify Bot Props**: On the settings page, you can modify the properties of the bot, such as name, command prefix, and bot token, you can remove them and add you own properties by changing the `config.json` file in the Bot directory.
     - **Save Changes**: After making modifications, click the "Save" button to save the changes to the JSON file corresponding to that bot.
 
 ## **License**:
-
+This project is licensed under the terms of the MIT license. See [LICENSE]() for more information.
+---
 
 That's it! You're now ready to manage your bots efficiently using the Bot Management system.
+
+Feel free to adjust the instructions as needed to fit your specific application and audience.
